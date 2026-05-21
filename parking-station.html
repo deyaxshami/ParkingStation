@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parking Station</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #1d2433;
+      --muted: #687386;
+      --line: #dce3ee;
+      --used: #d94848;
+      --used-bg: #fde8e8;
+      --free: #168a4a;
+      --free-bg: #e4f7ec;
+      --unknown: #7b8794;
+      --unknown-bg: #eef1f5;
+      --accent: #2364d2;
+      --accent-dark: #184ba3;
+      --charge: #b66a00;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    button {
+      border: 1px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      font: inherit;
+      min-height: 38px;
+      padding: 0 14px;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      align-items: center;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      padding: 14px 20px;
+    }
+
+    .brand h1 {
+      font-size: 22px;
+      letter-spacing: 0;
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    .brand p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 5px 0 0;
+    }
+
+    .actions {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .primary:hover:not(:disabled) {
+      background: var(--accent-dark);
+    }
+
+    .secondary {
+      background: #fff;
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    .status-pill {
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      display: inline-flex;
+      font-size: 13px;
+      gap: 8px;
+      min-height: 32px;
+      padding: 0 12px;
+    }
+
+    .dot {
+      background: var(--unknown);
+      border-radius: 999px;
+      height: 9px;
+      width: 9px;
+    }
+
+    .dot.connected {
+      background: var(--free);
+    }
+
+    .main {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      padding: 18px;
+    }
+
+    .surface {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .stats {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      padding: 14px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      display: block;
+      font-size: 12px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .parking-area {
+      padding: 18px;
+    }
+
+    .grid-title {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .grid-title h2 {
+      font-size: 18px;
+      margin: 0;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .legend-item {
+      align-items: center;
+      display: inline-flex;
+      gap: 6px;
+    }
+
+    .legend .swatch {
+      border-radius: 3px;
+      height: 12px;
+      width: 12px;
+    }
+
+    .parking-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(5, minmax(110px, 1fr));
+    }
+
+    .place {
+      border: 1px solid var(--line);
+      border-left-width: 5px;
+      border-radius: 8px;
+      min-height: 102px;
+      padding: 12px;
+      transition: background 160ms ease, border-color 160ms ease;
+    }
+
+    .place.used {
+      background: var(--used-bg);
+      border-left-color: var(--used);
+    }
+
+    .place.free {
+      background: var(--free-bg);
+      border-left-color: var(--free);
+    }
+
+    .place.unknown {
+      background: var(--unknown-bg);
+      border-left-color: var(--unknown);
+    }
+
+    .place-id {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .place-state {
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 18px;
+      text-transform: uppercase;
+    }
+
+    .place-meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .place-time {
+      color: var(--charge);
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .side {
+      display: grid;
+      gap: 18px;
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .panel {
+      padding: 16px;
+    }
+
+    .panel h2 {
+      font-size: 16px;
+      margin: 0 0 12px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .log {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: calc(100vh - 315px);
+      overflow: auto;
+      padding-right: 3px;
+    }
+
+    .log-entry {
+      background: #f7f9fc;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: #2a3344;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.35;
+      padding: 9px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .log-entry.error {
+      background: #fff2f2;
+      border-color: #f2b7b7;
+    }
+
+    @media (max-width: 980px) {
+      .main {
+        grid-template-columns: 1fr;
+      }
+
+      .parking-grid {
+        grid-template-columns: repeat(4, minmax(100px, 1fr));
+      }
+
+      .log-list {
+        max-height: 260px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .actions {
+        justify-content: flex-start;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .parking-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Top-level connection controls for the browser-to-STM32 serial link. -->
+    <header class="topbar">
+      <div class="brand">
+        <h1>Parking Station</h1>
+        <p>Live model dashboard via Web Serial</p>
+      </div>
+      <div class="actions">
+        <span class="status-pill"><span class="dot" id="connectionDot"></span><span id="connectionText">Disconnected</span></span>
+        <button class="primary" id="connectButton" type="button">Connect</button>
+        <button class="secondary" id="statusButton" type="button" disabled>Request Status</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <section>
+        <!-- Summary numbers are recalculated from the in-memory place model. -->
+        <div class="stats">
+          <div class="surface stat"><span>Total</span><strong id="totalCount">20</strong></div>
+          <div class="surface stat"><span>Used</span><strong id="usedCount">18</strong></div>
+          <div class="surface stat"><span>Free</span><strong id="freeCount">0</strong></div>
+          <div class="surface stat"><span>Unknown</span><strong id="unknownCount">2</strong></div>
+        </div>
+
+        <div class="surface parking-area">
+          <div class="grid-title">
+            <h2>Block A Coordinates</h2>
+            <div class="legend">
+              <span class="legend-item"><span class="swatch" style="background: var(--used);"></span>Used</span>
+              <span class="legend-item"><span class="swatch" style="background: var(--free);"></span>Free</span>
+              <span class="legend-item"><span class="swatch" style="background: var(--unknown);"></span>Unknown</span>
+            </div>
+          </div>
+          <!-- Parking tiles are rendered by JavaScript so live sensor updates can repaint them. -->
+          <div class="parking-grid" id="parkingGrid"></div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <div class="surface panel">
+          <h2>Serial</h2>
+          <p class="hint">Use Chrome or Edge. Choose the STLink Virtual COM Port, then request the current station state.</p>
+        </div>
+        <div class="surface panel log">
+          <h2>Log</h2>
+          <!-- New serial events are prepended here for quick testing during a demo. -->
+          <div class="log-list" id="logList"></div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    // The dashboard displays a full demo block, but only A12 and A41 come from hardware.
+    const blockId = "A";
+    const rowCount = 4;
+    const columnCount = 5;
+    const chargePerMinute = 0.25;
+    const placeIds = Array.from({ length: rowCount * columnCount }, (_, index) => {
+      const row = Math.floor(index / columnCount) + 1;
+      const column = (index % columnCount) + 1;
+      return `${blockId}${row}${column}`;
+    });
+
+    // Only these two fields are connected to real STM32 sensor data.
+    const livePlaces = new Set(["A12", "A41"]);
+
+    // Local UI model. Dummy places make the demo look like a larger parking area;
+    // live places remain unknown until the STM32 sends data.
+    const places = new Map(placeIds.map((id) => [id, {
+      id,
+      state: livePlaces.has(id) ? "unknown" : "used",
+      source: livePlaces.has(id) ? "live" : "dummy",
+      parkedSince: livePlaces.has(id) ? null : Date.now(),
+      lastTimestampMs: null
+    }]));
+
+    const parkingGrid = document.getElementById("parkingGrid");
+    const connectButton = document.getElementById("connectButton");
+    const statusButton = document.getElementById("statusButton");
+    const connectionText = document.getElementById("connectionText");
+    const connectionDot = document.getElementById("connectionDot");
+    const logList = document.getElementById("logList");
+    const totalCount = document.getElementById("totalCount");
+    const usedCount = document.getElementById("usedCount");
+    const freeCount = document.getElementById("freeCount");
+    const unknownCount = document.getElementById("unknownCount");
+
+    let port;
+    let reader;
+    let writer;
+    let readAbortController;
+    let textBuffer = "";
+
+    // Rebuilds the visual grid and statistic counters from the local model.
+    function render() {
+      parkingGrid.innerHTML = "";
+
+      for (const place of places.values()) {
+        const tile = document.createElement("article");
+        tile.className = `place ${place.state}`;
+        tile.innerHTML = `
+          <div class="place-id">${place.id}</div>
+          <div class="place-state">${place.state}</div>
+          <div class="place-meta">${placeLabel(place)} · ${place.source === "live" ? "hardware sensor" : "static dummy"}</div>
+          <div class="place-time">${parkingTimeLabel(place)}</div>
+        `;
+        parkingGrid.appendChild(tile);
+      }
+
+      const values = Array.from(places.values());
+      totalCount.textContent = String(values.length);
+      usedCount.textContent = String(values.filter((place) => place.state === "used").length);
+      freeCount.textContent = String(values.filter((place) => place.state === "free").length);
+      unknownCount.textContent = String(values.filter((place) => place.state === "unknown").length);
+    }
+
+    // Keeps a compact, newest-first event log for serial messages and parse errors.
+    function addLog(message, isError = false) {
+      const entry = document.createElement("div");
+      entry.className = `log-entry${isError ? " error" : ""}`;
+      entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+      logList.prepend(entry);
+
+      while (logList.children.length > 30) {
+        logList.lastElementChild.remove();
+      }
+    }
+
+    // Mirrors the current browser serial connection state into the toolbar.
+    function setConnected(isConnected) {
+      connectionText.textContent = isConnected ? "Connected" : "Disconnected";
+      connectionDot.classList.toggle("connected", isConnected);
+      connectButton.textContent = isConnected ? "Disconnect" : "Connect";
+      statusButton.disabled = !isConnected;
+    }
+
+    // Only free/used are expected from the firmware; unexpected values stay visible as unknown.
+    function stateFrom(value) {
+      return value === "used" || value === "free" ? value : "unknown";
+    }
+
+    // Converts a place id such as A12 into a human-readable block/row/column label.
+    function placeLabel(place) {
+      const row = place.id.slice(1, 2);
+      const column = place.id.slice(2, 3);
+      return `Block ${place.id[0]} · Row ${row} · Col ${column}`;
+    }
+
+    // Formats the browser-side parking timer used by the demo charge display.
+    function formatDuration(milliseconds) {
+      if (!Number.isFinite(milliseconds) || milliseconds < 0) {
+        return "0s";
+      }
+
+      const totalSeconds = Math.floor(milliseconds / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+      }
+
+      if (minutes > 0) {
+        return `${minutes}m ${seconds}s`;
+      }
+
+      return `${seconds}s`;
+    }
+
+    // Dummy charge calculation for presentation only; the STM32 does not bill parking time.
+    function parkingTimeLabel(place) {
+      if (place.state !== "used" || !place.parkedSince) {
+        return "Parking time: -";
+      }
+
+      const parkedMs = Date.now() - place.parkedSince;
+      const charge = Math.max(0, parkedMs / 60000) * chargePerMinute;
+      return `Parking time: ${formatDuration(parkedMs)} · €${charge.toFixed(2)}`;
+    }
+
+    // Applies one JSON status object emitted by the firmware.
+    function applyPlaceStatus(item) {
+      if (!item || typeof item.place !== "string" || !livePlaces.has(item.place)) {
+        return;
+      }
+
+      const place = places.get(item.place);
+      const nextState = stateFrom(item.state);
+      const previousState = place.state;
+
+      place.state = nextState;
+      place.lastTimestampMs = Number.isFinite(item.timestamp_ms) ? item.timestamp_ms : null;
+
+      if (nextState === "used" && previousState !== "used") {
+        place.parkedSince = Date.now();
+      }
+
+      if (nextState !== "used") {
+        place.parkedSince = null;
+      }
+    }
+
+    // The firmware sends one JSON document per line; arrays are used for STATUS snapshots.
+    function handleSerialLine(line) {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        return;
+      }
+
+      try {
+        const message = JSON.parse(trimmed);
+        addLog(logMessage(message, trimmed));
+
+        if (Array.isArray(message)) {
+          message.forEach(applyPlaceStatus);
+        } else {
+          applyPlaceStatus(message);
+        }
+
+        render();
+      } catch (error) {
+        addLog(`Parse error: ${trimmed}`, true);
+      }
+    }
+
+    // Creates a readable log entry from either a one-place event or a STATUS array.
+    function logMessage(message, fallback) {
+      const items = Array.isArray(message) ? message : [message];
+      const parts = items
+        .filter((item) => item && typeof item.place === "string")
+        .map((item) => {
+          const timestamp = Number.isFinite(item.timestamp_ms) ? ` @ ${item.timestamp_ms}ms` : "";
+          return `${item.place} ${item.state}${timestamp}`;
+        });
+
+      return parts.length > 0 ? parts.join(", ") : fallback;
+    }
+
+    // Accumulates stream chunks until complete newline-terminated JSON messages are available.
+    function handleSerialText(chunk) {
+      textBuffer += chunk;
+      const lines = textBuffer.split(/\r?\n/);
+      textBuffer = lines.pop() || "";
+      lines.forEach(handleSerialLine);
+    }
+
+    // Web Serial requires Chrome/Edge and a secure context such as localhost.
+    async function connect() {
+      if (!("serial" in navigator)) {
+        addLog("Web Serial is not available. Use Chrome or Edge from localhost.", true);
+        return;
+      }
+
+      port = await navigator.serial.requestPort();
+      await port.open({ baudRate: 115200, dataBits: 8, stopBits: 1, parity: "none", flowControl: "none" });
+
+      const textDecoder = new TextDecoderStream();
+      readAbortController = new AbortController();
+      port.readable.pipeTo(textDecoder.writable, { signal: readAbortController.signal }).catch(() => {});
+      reader = textDecoder.readable.getReader();
+      writer = port.writable.getWriter();
+      setConnected(true);
+      addLog("Connected");
+      readLoop();
+    }
+
+    // Releases Web Serial locks in the correct order before closing the port.
+    async function disconnect() {
+      try {
+        if (reader) {
+          await reader.cancel();
+          reader.releaseLock();
+          reader = undefined;
+        }
+
+        if (writer) {
+          writer.releaseLock();
+          writer = undefined;
+        }
+
+        if (readAbortController) {
+          readAbortController.abort();
+          readAbortController = undefined;
+        }
+
+        if (port) {
+          await port.close();
+          port = undefined;
+        }
+      } catch (error) {
+        addLog(`Disconnect error: ${error.message}`, true);
+      } finally {
+        setConnected(false);
+        addLog("Disconnected");
+      }
+    }
+
+    // Continuously consumes decoded serial text until the port is disconnected.
+    async function readLoop() {
+      try {
+        while (reader) {
+          const { value, done } = await reader.read();
+          if (done) {
+            break;
+          }
+          handleSerialText(value);
+        }
+      } catch (error) {
+        if (port) {
+          addLog(`Read error: ${error.message}`, true);
+        }
+      }
+    }
+
+    // STATUS asks the firmware for a full snapshot of the live sensor places.
+    async function sendStatusRequest() {
+      if (!writer) {
+        return;
+      }
+
+      const bytes = new TextEncoder().encode("STATUS\r");
+      await writer.write(bytes);
+      addLog("Sent: STATUS");
+    }
+
+    // Connect button toggles between opening and closing the selected serial port.
+    connectButton.addEventListener("click", async () => {
+      try {
+        if (port) {
+          await disconnect();
+        } else {
+          await connect();
+        }
+      } catch (error) {
+        addLog(error.message, true);
+        setConnected(false);
+      }
+    });
+
+    // Manual snapshot request. Automatic firmware events are still handled by readLoop().
+    statusButton.addEventListener("click", () => {
+      sendStatusRequest().catch((error) => addLog(error.message, true));
+    });
+
+    render();
+    setInterval(render, 1000);
+  </script>
+</body>
+</html>
