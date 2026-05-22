@@ -1,3 +1,5 @@
+<div dir="rtl">
+
 # ParkingStation
 
 [Deutsch](README_DE.md) | [English](README.md) | [العربية](README_AR.md) | [Español](README_ES.md) | [Français](README_FR.md)
@@ -555,3 +557,5 @@ cmake --build --preset Release
 - إرسال البيانات إلى خادم أو MQTT broker أو قاعدة بيانات.
 - إضافة كشف مستقل لأخطاء الحساسات إذا كان مطلوبا اكتشاف الحساسات المفصولة أو المعطوبة تلقائيا.
 - إضافة هيكل وتوصيلات ثابتة ودوائر حماية لتركيب أكثر متانة.
+
+</div>
