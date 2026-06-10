@@ -195,7 +195,7 @@ ParkingStation/
 +-- STM32G431XX_FLASH.ld
 +-- startup_stm32g431xx.s
 +-- Assets/
-|   +-- image-20260520-232528-615.jpeg
+|   +-- ParkingModelInterior.jpeg
 |   +-- ...
 +-- parking-station.html
 +-- 03 Vorlage - IPERKA 6-Phasen-Methode.docx
@@ -336,11 +336,11 @@ Le fichier `parking-station.html` est une interface utilisateur locale simple. I
 
 La vue d'ensemble suivante montre le tableau de bord avant l'établissement de la connexion série. Les places matérielles `A12` et `A41` sont d'abord affichées comme inconnues jusqu'à la demande de l'état actuel.
 
-![Vue d'ensemble du tableau de bord web Parking Station](Assets/WebSiteOverView.png)
+![Vue d'ensemble du tableau de bord web Parking Station](Assets/DashboardOverview.png)
 
 | Bouton Connect | Sélection du port série |
 | --- | --- |
-| ![Bouton Connect dans le tableau de bord web](Assets/ConnectButton.png) | ![Dialogue du navigateur pour sélectionner le port série](Assets/ChooseSerailPort.png) |
+| ![Bouton Connect dans le tableau de bord web](Assets/DashboardConnectButton.png) | ![Dialogue du navigateur pour sélectionner le port série](Assets/SerialPortSelectionDialog.png) |
 | Cliquer sur `Connect` ouvre la sélection des appareils Web Serial du navigateur. | Sélectionner le ST-LINK Virtual COM Port. Si aucun appareil compatible n'apparaît, vérifier la connexion USB et qu'aucun autre programme n'utilise le port. |
 
 ### Démarrage local du tableau de bord
@@ -516,17 +516,17 @@ Les images suivantes se trouvent dans le dossier `Assets/` et documentent le mon
 
 | Image | Description | But pour la documentation |
 | --- | --- | --- |
-| ![Vue intérieure avec deux places](Assets/image-20260520-232528-615.jpeg) | Vue intérieure du modèle en carton avec deux places séparées | Montre le montage mécanique et la position des surfaces de stationnement |
-| ![Vue extérieure du boîtier du modèle](Assets/image-20260520-232528-670.jpeg) | Vue extérieure du boîtier du modèle | Documente le boîtier fini en carton |
-| ![Arrière avec NUCLEO et câblage](Assets/image-20260520-232528-719.jpeg) | Arrière avec carte NUCLEO et câbles jumper | Montre que l'électronique est connectée au modèle |
-| ![Vue latérale avec câbles](Assets/image-20260520-232528-764.jpeg) | Vue latérale avec cheminement des câbles | Aide à comprendre le câblage de la carte vers les capteurs et LEDs |
-| ![Vue du boîtier](Assets/image-20260520-232528-807.jpeg) | Vue extérieure du boîtier | Documente la stabilité, la forme et la construction du modèle |
-| ![Vue intérieure avec les deux LEDs vertes](Assets/image-20260520-232528-851.jpeg) | Vue intérieure avec les deux LEDs vertes de disponibilité | Montre l'affichage matériel direct pour les places libres |
-| ![Breadboard et câblage de la carte](Assets/image-20260520-232528-899.jpeg) | Breadboard, zone NUCLEO et fils de connexion | Sert de preuve du montage de test électrique |
-| ![Fonction LED visible](Assets/image-20260520-232528-945.jpeg) | LED verte allumée dans la place | Montre la fonction: une place libre est signalée par une lumière verte |
-| ![Place avec voiture miniature](Assets/image-20260520-232528-989.jpeg) | Place avec voiture miniature dans la zone du capteur | Montre le résultat final dans une situation de test réaliste |
-| ![Modèle de parking avec le nouveau capteur droit](Assets/BoxWithNewSensor.jpeg) | Vue intérieure du modèle après l'installation du capteur de remplacement dans la place droite | Documente le montage modifié après l'endommagement du capteur d'origine pendant les tests |
-| ![Gros plan du nouveau capteur IR](Assets/NewSensor.jpeg) | Gros plan du nouveau module capteur IR de détection d'obstacles AZ-Delivery | Montre le capteur de remplacement, ses composants infrarouges et son potentiomètre réglable |
+| ![Vue intérieure avec deux places](Assets/ParkingModelInterior.jpeg) | Vue intérieure du modèle en carton avec deux places séparées | Montre le montage mécanique et la position des surfaces de stationnement |
+| ![Vue extérieure du boîtier du modèle](Assets/ParkingModelExterior.jpeg) | Vue extérieure du boîtier du modèle | Documente le boîtier fini en carton |
+| ![Arrière avec NUCLEO et câblage](Assets/NucleoWiringRearView.jpeg) | Arrière avec carte NUCLEO et câbles jumper | Montre que l'électronique est connectée au modèle |
+| ![Vue latérale avec câbles](Assets/CableRoutingSideView.jpeg) | Vue latérale avec cheminement des câbles | Aide à comprendre le câblage de la carte vers les capteurs et LEDs |
+| ![Vue du boîtier](Assets/ParkingModelHousing.jpeg) | Vue extérieure du boîtier | Documente la stabilité, la forme et la construction du modèle |
+| ![Vue intérieure avec les deux LEDs vertes](Assets/GreenAvailabilityLeds.jpeg) | Vue intérieure avec les deux LEDs vertes de disponibilité | Montre l'affichage matériel direct pour les places libres |
+| ![Breadboard et câblage de la carte](Assets/BreadboardNucleoWiring.jpeg) | Breadboard, zone NUCLEO et fils de connexion | Sert de preuve du montage de test électrique |
+| ![Fonction LED visible](Assets/GreenAvailabilityLed.jpeg) | LED verte allumée dans la place | Montre la fonction: une place libre est signalée par une lumière verte |
+| ![Place avec voiture miniature](Assets/ModelCarSensorTest.jpeg) | Place avec voiture miniature dans la zone du capteur | Montre le résultat final dans une situation de test réaliste |
+| ![Modèle de parking avec le nouveau capteur droit](Assets/ParkingModelWithReplacementSensor.jpeg) | Vue intérieure du modèle après l'installation du capteur de remplacement dans la place droite | Documente le montage modifié après l'endommagement du capteur d'origine pendant les tests |
+| ![Gros plan du nouveau capteur IR](Assets/ReplacementIrSensor.jpeg) | Gros plan du nouveau module capteur IR de détection d'obstacles AZ-Delivery | Montre le capteur de remplacement, ses composants infrarouges et son potentiomètre réglable |
 
 ## Méthode IPERKA en 6 phases
 

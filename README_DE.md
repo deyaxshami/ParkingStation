@@ -193,7 +193,7 @@ ParkingStation/
 +-- STM32G431XX_FLASH.ld
 +-- startup_stm32g431xx.s
 +-- Assets/
-|   +-- image-20260520-232528-615.jpeg
+|   +-- ParkingModelInterior.jpeg
 |   +-- ...
 +-- parking-station.html
 +-- 03 Vorlage - IPERKA 6-Phasen-Methode.docx
@@ -330,11 +330,11 @@ Die Datei `parking-station.html` ist eine einfache lokale Benutzeroberflaeche. S
 
 Die folgende Uebersicht zeigt das Dashboard vor dem Aufbau der seriellen Verbindung. Die Hardware-Plaetze `A12` und `A41` werden zuerst als unbekannt angezeigt, bis der aktuelle Status angefordert wird.
 
-![Uebersicht des Parking-Station-Web-Dashboards](Assets/WebSiteOverView.png)
+![Uebersicht des Parking-Station-Web-Dashboards](Assets/DashboardOverview.png)
 
 | Connect-Schaltflaeche | Auswahl des seriellen Ports |
 | --- | --- |
-| ![Connect-Schaltflaeche im Web-Dashboard](Assets/ConnectButton.png) | ![Browserdialog zur Auswahl des seriellen Ports](Assets/ChooseSerailPort.png) |
+| ![Connect-Schaltflaeche im Web-Dashboard](Assets/DashboardConnectButton.png) | ![Browserdialog zur Auswahl des seriellen Ports](Assets/SerialPortSelectionDialog.png) |
 | Mit `Connect` wird die Web-Serial-Geraeteauswahl des Browsers geoeffnet. | Den ST-LINK Virtual COM Port auswaehlen. Wenn kein kompatibles Geraet erscheint, USB-Verbindung pruefen und sicherstellen, dass kein anderes Programm den Port verwendet. |
 
 ### Lokaler Start des Dashboards
@@ -510,17 +510,17 @@ Die folgenden Bilder liegen im Ordner `Assets/` und dokumentieren den realen Auf
 
 | Bild | Beschreibung | Zweck fuer die Dokumentation |
 | --- | --- | --- |
-| ![Innenansicht mit zwei Parkplaetzen](Assets/image-20260520-232528-615.jpeg) | Innenansicht des Kartonmodells mit zwei getrennten Parkplaetzen | Zeigt den mechanischen Aufbau und die Position der Parkflaechen |
-| ![Aussenansicht Modellgehaeuse](Assets/image-20260520-232528-670.jpeg) | Aussenansicht des Modellgehaeuses | Dokumentiert das fertige Gehaeuse aus Karton |
-| ![Rueckseite mit NUCLEO und Verkabelung](Assets/image-20260520-232528-719.jpeg) | Rueckseite mit NUCLEO-Board und Jumper-Kabeln | Zeigt, dass die Elektronik am Modell angeschlossen ist |
-| ![Seitenansicht mit Leitungen](Assets/image-20260520-232528-764.jpeg) | Seitenansicht mit Leitungsfuehrung | Hilft beim Nachvollziehen der Verkabelung vom Board zu Sensoren und LEDs |
-| ![Gehaeuseansicht](Assets/image-20260520-232528-807.jpeg) | Gehaeuseansicht von aussen | Dokumentiert Stabilitaet, Form und Bauweise des Modells |
-| ![Innenansicht mit beiden gruenen LEDs](Assets/image-20260520-232528-851.jpeg) | Innenansicht mit beiden gruenen Frei-LEDs | Zeigt die direkte Hardwareanzeige fuer freie Parkplaetze |
-| ![Breadboard und Board-Verkabelung](Assets/image-20260520-232528-899.jpeg) | Breadboard, NUCLEO-Bereich und Anschlussleitungen | Dient als Nachweis fuer den elektrischen Testaufbau |
-| ![LED-Funktion sichtbar](Assets/image-20260520-232528-945.jpeg) | Eingeschaltete gruene LED im Parkplatz | Zeigt die Funktion: freier Platz wird mit gruenem Licht signalisiert |
-| ![Parkplatz mit Modellauto](Assets/image-20260520-232528-989.jpeg) | Parkplatz mit Modellauto im Sensorbereich | Zeigt das Handlungsergebnis in einer realistischen Testsituation |
-| ![Parkplatzmodell mit neuem rechten Sensor](Assets/BoxWithNewSensor.jpeg) | Innenansicht des Modells nach dem Einbau des Ersatzsensors im rechten Parkplatz | Dokumentiert den geaenderten Aufbau nach der Beschaedigung des urspruenglichen Sensors beim Testen |
-| ![Nahaufnahme des neuen IR-Sensors](Assets/NewSensor.jpeg) | Nahaufnahme des neuen AZ-Delivery IR-Hinderniserkennungs-Sensormoduls | Zeigt den Ersatzsensor, seine Infrarot-Komponenten und das einstellbare Potentiometer |
+| ![Innenansicht mit zwei Parkplaetzen](Assets/ParkingModelInterior.jpeg) | Innenansicht des Kartonmodells mit zwei getrennten Parkplaetzen | Zeigt den mechanischen Aufbau und die Position der Parkflaechen |
+| ![Aussenansicht Modellgehaeuse](Assets/ParkingModelExterior.jpeg) | Aussenansicht des Modellgehaeuses | Dokumentiert das fertige Gehaeuse aus Karton |
+| ![Rueckseite mit NUCLEO und Verkabelung](Assets/NucleoWiringRearView.jpeg) | Rueckseite mit NUCLEO-Board und Jumper-Kabeln | Zeigt, dass die Elektronik am Modell angeschlossen ist |
+| ![Seitenansicht mit Leitungen](Assets/CableRoutingSideView.jpeg) | Seitenansicht mit Leitungsfuehrung | Hilft beim Nachvollziehen der Verkabelung vom Board zu Sensoren und LEDs |
+| ![Gehaeuseansicht](Assets/ParkingModelHousing.jpeg) | Gehaeuseansicht von aussen | Dokumentiert Stabilitaet, Form und Bauweise des Modells |
+| ![Innenansicht mit beiden gruenen LEDs](Assets/GreenAvailabilityLeds.jpeg) | Innenansicht mit beiden gruenen Frei-LEDs | Zeigt die direkte Hardwareanzeige fuer freie Parkplaetze |
+| ![Breadboard und Board-Verkabelung](Assets/BreadboardNucleoWiring.jpeg) | Breadboard, NUCLEO-Bereich und Anschlussleitungen | Dient als Nachweis fuer den elektrischen Testaufbau |
+| ![LED-Funktion sichtbar](Assets/GreenAvailabilityLed.jpeg) | Eingeschaltete gruene LED im Parkplatz | Zeigt die Funktion: freier Platz wird mit gruenem Licht signalisiert |
+| ![Parkplatz mit Modellauto](Assets/ModelCarSensorTest.jpeg) | Parkplatz mit Modellauto im Sensorbereich | Zeigt das Handlungsergebnis in einer realistischen Testsituation |
+| ![Parkplatzmodell mit neuem rechten Sensor](Assets/ParkingModelWithReplacementSensor.jpeg) | Innenansicht des Modells nach dem Einbau des Ersatzsensors im rechten Parkplatz | Dokumentiert den geaenderten Aufbau nach der Beschaedigung des urspruenglichen Sensors beim Testen |
+| ![Nahaufnahme des neuen IR-Sensors](Assets/ReplacementIrSensor.jpeg) | Nahaufnahme des neuen AZ-Delivery IR-Hinderniserkennungs-Sensormoduls | Zeigt den Ersatzsensor, seine Infrarot-Komponenten und das einstellbare Potentiometer |
 
 ## IPERKA 6-Phasen-Methode
 

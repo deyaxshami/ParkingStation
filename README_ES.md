@@ -195,7 +195,7 @@ ParkingStation/
 +-- STM32G431XX_FLASH.ld
 +-- startup_stm32g431xx.s
 +-- Assets/
-|   +-- image-20260520-232528-615.jpeg
+|   +-- ParkingModelInterior.jpeg
 |   +-- ...
 +-- parking-station.html
 +-- 03 Vorlage - IPERKA 6-Phasen-Methode.docx
@@ -336,11 +336,11 @@ El archivo `parking-station.html` es una interfaz local sencilla. Muestra un blo
 
 La siguiente vista general muestra el panel antes de establecer la conexión serie. Las plazas de hardware `A12` y `A41` aparecen inicialmente como desconocidas hasta que se solicita el estado actual.
 
-![Vista general del panel web de Parking Station](Assets/WebSiteOverView.png)
+![Vista general del panel web de Parking Station](Assets/DashboardOverview.png)
 
 | Botón Connect | Selección del puerto serie |
 | --- | --- |
-| ![Botón Connect en el panel web](Assets/ConnectButton.png) | ![Diálogo del navegador para seleccionar el puerto serie](Assets/ChooseSerailPort.png) |
+| ![Botón Connect en el panel web](Assets/DashboardConnectButton.png) | ![Diálogo del navegador para seleccionar el puerto serie](Assets/SerialPortSelectionDialog.png) |
 | Hacer clic en `Connect` abre la selección de dispositivos Web Serial del navegador. | Seleccionar el ST-LINK Virtual COM Port. Si no aparece ningún dispositivo compatible, comprobar la conexión USB y que ningún otro programa esté usando el puerto. |
 
 ### Inicio local del panel
@@ -516,17 +516,17 @@ Las siguientes imágenes están en la carpeta `Assets/` y documentan el montaje 
 
 | Imagen | Descripción | Propósito para la documentación |
 | --- | --- | --- |
-| ![Vista interior con dos plazas](Assets/image-20260520-232528-615.jpeg) | Vista interior de la maqueta de cartón con dos plazas separadas | Muestra el montaje mecánico y la posición de las superficies de aparcamiento |
-| ![Vista exterior de la carcasa del modelo](Assets/image-20260520-232528-670.jpeg) | Vista exterior de la carcasa del modelo | Documenta la carcasa terminada de cartón |
-| ![Parte trasera con NUCLEO y cableado](Assets/image-20260520-232528-719.jpeg) | Parte trasera con placa NUCLEO y cables jumper | Muestra que la electrónica está conectada al modelo |
-| ![Vista lateral con cables](Assets/image-20260520-232528-764.jpeg) | Vista lateral con guiado de cables | Ayuda a seguir el cableado desde la placa hasta sensores y LEDs |
-| ![Vista de la carcasa](Assets/image-20260520-232528-807.jpeg) | Vista exterior de la carcasa | Documenta estabilidad, forma y construcción del modelo |
-| ![Vista interior con ambos LEDs verdes](Assets/image-20260520-232528-851.jpeg) | Vista interior con ambos LEDs verdes de disponibilidad | Muestra la indicación directa de hardware para plazas libres |
-| ![Breadboard y cableado de la placa](Assets/image-20260520-232528-899.jpeg) | Breadboard, zona NUCLEO y cables de conexión | Sirve como prueba del montaje eléctrico de prueba |
-| ![Función LED visible](Assets/image-20260520-232528-945.jpeg) | LED verde encendido en la plaza | Muestra la función: una plaza libre se señaliza con luz verde |
-| ![Plaza con coche de maqueta](Assets/image-20260520-232528-989.jpeg) | Plaza con coche de maqueta en la zona del sensor | Muestra el resultado final en una situación de prueba realista |
-| ![Modelo de aparcamiento con el nuevo sensor derecho](Assets/BoxWithNewSensor.jpeg) | Vista interior del modelo después de instalar el sensor de sustitución en la plaza derecha | Documenta el montaje modificado después de que el sensor original se dañara durante las pruebas |
-| ![Primer plano del nuevo sensor IR](Assets/NewSensor.jpeg) | Primer plano del nuevo módulo sensor IR de detección de obstáculos de AZ-Delivery | Muestra el sensor de sustitución, sus componentes infrarrojos y el potenciómetro ajustable |
+| ![Vista interior con dos plazas](Assets/ParkingModelInterior.jpeg) | Vista interior de la maqueta de cartón con dos plazas separadas | Muestra el montaje mecánico y la posición de las superficies de aparcamiento |
+| ![Vista exterior de la carcasa del modelo](Assets/ParkingModelExterior.jpeg) | Vista exterior de la carcasa del modelo | Documenta la carcasa terminada de cartón |
+| ![Parte trasera con NUCLEO y cableado](Assets/NucleoWiringRearView.jpeg) | Parte trasera con placa NUCLEO y cables jumper | Muestra que la electrónica está conectada al modelo |
+| ![Vista lateral con cables](Assets/CableRoutingSideView.jpeg) | Vista lateral con guiado de cables | Ayuda a seguir el cableado desde la placa hasta sensores y LEDs |
+| ![Vista de la carcasa](Assets/ParkingModelHousing.jpeg) | Vista exterior de la carcasa | Documenta estabilidad, forma y construcción del modelo |
+| ![Vista interior con ambos LEDs verdes](Assets/GreenAvailabilityLeds.jpeg) | Vista interior con ambos LEDs verdes de disponibilidad | Muestra la indicación directa de hardware para plazas libres |
+| ![Breadboard y cableado de la placa](Assets/BreadboardNucleoWiring.jpeg) | Breadboard, zona NUCLEO y cables de conexión | Sirve como prueba del montaje eléctrico de prueba |
+| ![Función LED visible](Assets/GreenAvailabilityLed.jpeg) | LED verde encendido en la plaza | Muestra la función: una plaza libre se señaliza con luz verde |
+| ![Plaza con coche de maqueta](Assets/ModelCarSensorTest.jpeg) | Plaza con coche de maqueta en la zona del sensor | Muestra el resultado final en una situación de prueba realista |
+| ![Modelo de aparcamiento con el nuevo sensor derecho](Assets/ParkingModelWithReplacementSensor.jpeg) | Vista interior del modelo después de instalar el sensor de sustitución en la plaza derecha | Documenta el montaje modificado después de que el sensor original se dañara durante las pruebas |
+| ![Primer plano del nuevo sensor IR](Assets/ReplacementIrSensor.jpeg) | Primer plano del nuevo módulo sensor IR de detección de obstáculos de AZ-Delivery | Muestra el sensor de sustitución, sus componentes infrarrojos y el potenciómetro ajustable |
 
 ## Método IPERKA de 6 fases
 

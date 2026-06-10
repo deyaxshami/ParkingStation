@@ -195,7 +195,7 @@ ParkingStation/
 +-- STM32G431XX_FLASH.ld
 +-- startup_stm32g431xx.s
 +-- Assets/
-|   +-- image-20260520-232528-615.jpeg
+|   +-- ParkingModelInterior.jpeg
 |   +-- ...
 +-- parking-station.html
 +-- 03 Vorlage - IPERKA 6-Phasen-Methode.docx
@@ -336,11 +336,11 @@ The file `parking-station.html` is a simple local user interface. It displays a 
 
 The following overview shows the dashboard before the serial connection is established. The hardware spaces `A12` and `A41` are initially displayed as unknown until the current status is requested.
 
-![Overview of the Parking Station Web Dashboard](Assets/WebSiteOverView.png)
+![Overview of the Parking Station Web Dashboard](Assets/DashboardOverview.png)
 
 | Connect button | Serial-port selection |
 | --- | --- |
-| ![Connect button in the Web Dashboard](Assets/ConnectButton.png) | ![Browser dialog for selecting the serial port](Assets/ChooseSerailPort.png) |
+| ![Connect button in the Web Dashboard](Assets/DashboardConnectButton.png) | ![Browser dialog for selecting the serial port](Assets/SerialPortSelectionDialog.png) |
 | Click `Connect` to open the browser's Web Serial device selection. | Select the ST-LINK Virtual COM Port. If no compatible device appears, check the USB connection and whether another program is already using the port. |
 
 ### Starting the Dashboard Locally
@@ -516,17 +516,17 @@ The following images are stored in the `Assets/` folder and document the real se
 
 | Image | Description | Purpose for documentation |
 | --- | --- | --- |
-| ![Interior view with two parking spaces](Assets/image-20260520-232528-615.jpeg) | Interior view of the cardboard model with two separated parking spaces | Shows the mechanical setup and the position of the parking surfaces |
-| ![Exterior view of model housing](Assets/image-20260520-232528-670.jpeg) | Exterior view of the model housing | Documents the finished cardboard housing |
-| ![Rear side with NUCLEO and wiring](Assets/image-20260520-232528-719.jpeg) | Rear side with NUCLEO board and jumper wires | Shows that the electronics are connected to the model |
-| ![Side view with cables](Assets/image-20260520-232528-764.jpeg) | Side view with cable routing | Helps trace the wiring from the board to sensors and LEDs |
-| ![Housing view](Assets/image-20260520-232528-807.jpeg) | Exterior housing view | Documents stability, shape, and construction of the model |
-| ![Interior view with both green LEDs](Assets/image-20260520-232528-851.jpeg) | Interior view with both green availability LEDs | Shows the direct hardware display for free parking spaces |
-| ![Breadboard and board wiring](Assets/image-20260520-232528-899.jpeg) | Breadboard, NUCLEO area, and connection wires | Serves as proof of the electrical test setup |
-| ![LED function visible](Assets/image-20260520-232528-945.jpeg) | Switched-on green LED in the parking space | Shows the function: a free space is signaled with green light |
-| ![Parking space with model car](Assets/image-20260520-232528-989.jpeg) | Parking space with a model car in the sensor area | Shows the final result in a realistic test situation |
-| ![Parking model with the new right-hand sensor](Assets/BoxWithNewSensor.jpeg) | Interior view of the model after installing the replacement sensor on the right-hand parking space | Documents the changed setup after the original sensor was damaged during testing |
-| ![Close-up of the new IR sensor](Assets/NewSensor.jpeg) | Close-up of the new AZ-Delivery IR obstacle-detection sensor module | Shows the replacement sensor, its infrared components, and adjustable potentiometer |
+| ![Interior view with two parking spaces](Assets/ParkingModelInterior.jpeg) | Interior view of the cardboard model with two separated parking spaces | Shows the mechanical setup and the position of the parking surfaces |
+| ![Exterior view of model housing](Assets/ParkingModelExterior.jpeg) | Exterior view of the model housing | Documents the finished cardboard housing |
+| ![Rear side with NUCLEO and wiring](Assets/NucleoWiringRearView.jpeg) | Rear side with NUCLEO board and jumper wires | Shows that the electronics are connected to the model |
+| ![Side view with cables](Assets/CableRoutingSideView.jpeg) | Side view with cable routing | Helps trace the wiring from the board to sensors and LEDs |
+| ![Housing view](Assets/ParkingModelHousing.jpeg) | Exterior housing view | Documents stability, shape, and construction of the model |
+| ![Interior view with both green LEDs](Assets/GreenAvailabilityLeds.jpeg) | Interior view with both green availability LEDs | Shows the direct hardware display for free parking spaces |
+| ![Breadboard and board wiring](Assets/BreadboardNucleoWiring.jpeg) | Breadboard, NUCLEO area, and connection wires | Serves as proof of the electrical test setup |
+| ![LED function visible](Assets/GreenAvailabilityLed.jpeg) | Switched-on green LED in the parking space | Shows the function: a free space is signaled with green light |
+| ![Parking space with model car](Assets/ModelCarSensorTest.jpeg) | Parking space with a model car in the sensor area | Shows the final result in a realistic test situation |
+| ![Parking model with the new right-hand sensor](Assets/ParkingModelWithReplacementSensor.jpeg) | Interior view of the model after installing the replacement sensor on the right-hand parking space | Documents the changed setup after the original sensor was damaged during testing |
+| ![Close-up of the new IR sensor](Assets/ReplacementIrSensor.jpeg) | Close-up of the new AZ-Delivery IR obstacle-detection sensor module | Shows the replacement sensor, its infrared components, and adjustable potentiometer |
 
 ## IPERKA 6-Phase Method
 
