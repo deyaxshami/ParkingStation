@@ -326,6 +326,17 @@ Die Datei `parking-station.html` ist eine einfache lokale Benutzeroberflaeche. S
 5. Mit `Request Status` den aktuellen Zustand anfordern.
 6. Sensor A12 oder A41 abdecken und die zugehoerige gruene LED beobachten; nach etwa drei Sekunden erscheint zusaetzlich die JSON-Aenderung.
 
+### Screenshots des Dashboards
+
+Die folgende Uebersicht zeigt das Dashboard vor dem Aufbau der seriellen Verbindung. Die Hardware-Plaetze `A12` und `A41` werden zuerst als unbekannt angezeigt, bis der aktuelle Status angefordert wird.
+
+![Uebersicht des Parking-Station-Web-Dashboards](Assets/WebSiteOverView.png)
+
+| Connect-Schaltflaeche | Auswahl des seriellen Ports |
+| --- | --- |
+| ![Connect-Schaltflaeche im Web-Dashboard](Assets/ConnectButton.png) | ![Browserdialog zur Auswahl des seriellen Ports](Assets/ChooseSerailPort.png) |
+| Mit `Connect` wird die Web-Serial-Geraeteauswahl des Browsers geoeffnet. | Den ST-LINK Virtual COM Port auswaehlen. Wenn kein kompatibles Geraet erscheint, USB-Verbindung pruefen und sicherstellen, dass kein anderes Programm den Port verwendet. |
+
 ### Lokaler Start des Dashboards
 
 Web Serial funktioniert in der Regel in Chrome oder Edge und benoetigt einen sicheren Kontext. Fuer lokale Entwicklung ist `localhost` geeignet. Ein einfacher Start ist zum Beispiel:
@@ -420,6 +431,48 @@ Im Dashboard sollten die Felder `A12` und `A41` den echten Sensorzustand anzeige
 
 ## Grenzen und bekannte Einschraenkungen
 
+### Reines Schulprojekt und ungeeignet fuer den realen Betrieb
+
+Diese Parking Station ist ausschliesslich ein Schul- und Demonstrationsprojekt. Sie zeigt das grundlegende Zusammenspiel von Sensoren, Firmware, serieller Kommunikation und Web-Oberflaeche, ist aber kein zertifiziertes oder ausreichend robustes Produkt fuer einen echten oeffentlichen oder gewerblichen Parkplatz. Ein reales System muss bei wechselndem Wetter zuverlaessig bleiben, Fehler automatisch erkennen, Verkehr und Vandalismus aushalten, seine Kommunikation schuetzen und beim Ausfall einzelner Komponenten sicher weiterarbeiten.
+
+#### Moegliche Fehlerfaelle in der realen Welt
+
+- Ein Blatt, Papier, Muell oder ein anderer Gegenstand auf dem Sensor kann als geparktes Fahrzeug gemeldet werden.
+- Regen, Pfuetzen, Kondenswasser, Schlamm, Schnee oder Eis koennen den Sensor bedecken, die Infrarotreflexion veraendern, Korrosion verursachen oder einen elektrischen Fehler ausloesen.
+- Eine Person, die auf dem Parkplatz steht und sich unterhaelt, ein Fahrrad, Einkaufswagen, Tier oder anderer Gegenstand kann faelschlicherweise als Belegung erkannt werden.
+- Schwarze, matte, verschmutzte oder schlecht reflektierende Oberflaechen koennen zu wenig Infrarotlicht zurueckwerfen, sodass ein belegter Platz als frei erscheint.
+- Direktes Sonnenlicht, Scheinwerfer, Schatten und wechselndes Umgebungslicht koennen die Infrarotmessung stoeren.
+- Fahrzeuge mit grosser Bodenfreiheit, ungewoehnlicher Form oder unguenstiger Parkposition decken den Sensor moeglicherweise nicht richtig ab.
+- Ein Nachbarfahrzeug oder ein ueberstehendes Fahrzeugteil kann den falschen Parkplatz ausloesen.
+- Kabel und offene Komponenten koennen durch Feuchtigkeit, Verkehr, Reinigungsgeraete, Vandalismus oder versehentliche Beruehrung beschaedigt werden.
+- Stromversorgung, USB, serielle Kommunikation, Browser oder Mikrocontroller koennen ausfallen. Der Prototyp besitzt keine automatische Fehlermeldung, Redundanz, Fernueberwachung oder verlaessliche Wiederherstellungsstrategie.
+- Das lokale Web-Serial-Dashboard eignet sich fuer eine Vorfuehrung, ist aber keine skalierbare, abgesicherte oder hochverfuegbare Verwaltungsplattform.
+
+#### Bessere Loesungen fuer reale Parkplaetze
+
+| Loesung | Vorteile | Nachteile und Realisierbarkeit |
+| --- | --- | --- |
+| Wetterfester Bodensensor mit Magnetometer und Radar | Sensorfusion erkennt sowohl den magnetischen Einfluss als auch die physische Anwesenheit eines Fahrzeugs; Blaetter, Personen und Licht haben weniger Einfluss | Eine realistische und robuste Aussenloesung, aber Strassenarbeiten, wasserdichter Einbau, Batteriewechsel, Kalibrierung und Wartung erhoehen die Kosten |
+| Gewichts- oder Drucksensor zusammen mit IR-Sensor | Ein passender Gewichtsschwellwert kann viele Fahrzeuge von Blaettern oder Personen unterscheiden; IR liefert eine zweite Messung | Technisch moeglich, aber der Einbau in die Fahrbahn ist teuer; Entwaesserung, Frost, Verschleiss, hohe Lasten, Motorraeder und Kalibrierung bleiben schwierig |
+| Ultraschall- oder Radarsensoren ueber dem Parkplatz | Geschuetzte Montage und gute Erkennung je Parkplatz, besonders in Parkhaeusern | Realistisch, wenn Decken oder Tragkonstruktionen vorhanden sind; fuer offene Parkplaetze weniger praktisch und weiterhin mit Strom-, Netzwerk- und Wartungsaufwand verbunden |
+| KI-Kamerasystem | Eine Kamera kann mehrere Parkplaetze ueberwachen und Fahrzeuge von vielen anderen Objekten unterscheiden | Bei vielen Plaetzen moeglicherweise wirtschaftlich, aber anfaellig fuer Verdeckung, Dunkelheit, Wetter, verschmutzte Linsen und Modellfehler; ausserdem entstehen erhebliche Datenschutz- und Cybersicherheitsanforderungen |
+
+Fuer eine kleine reale Aussenanlage waere ein industrieller, IP-zertifizierter Bodensensor mit Magnetometer und Radar normalerweise realistischer als der offene IR-Prototyp. Er sollte mit einem ueberwachten Backend verbunden sein und Batteriekontrolle, Kommunikationspruefung, Fehlerzustaende, sichere Updates und regelmaessige Wartung unterstuetzen. Eine KI-Kamera kann sinnvoll sein, wenn viele Plaetze abgedeckt werden muessen, sollte die Belegung aber moeglichst lokal verarbeiten, keine Identifizierung durchfuehren und Bilder nur speichern, wenn dies notwendig und rechtlich begruendet ist.
+
+#### Finanzielle, rechtliche und betriebliche Bewertung
+
+- Die guenstigen Bauteile dieses Prototyps bilden nicht die Hauptkosten eines realen Systems ab. Tiefbau, wetterfeste Gehaeuse, Installation, Stromversorgung, Netzwerk, Backend-Software, Kalibrierung, Kontrollen, Reparaturen und langfristige Wartung koennen deutlich mehr als die Sensoren selbst kosten.
+- Sensorfusion verbessert die Zuverlaessigkeit, erhoeht aber Hardwarepreis, Energiebedarf, Softwarekomplexitaet und Wartungsaufwand. Vor einem Einsatz muss auch ein professionelles System im Feld getestet und seine Genauigkeit gemessen werden.
+- Kamerasysteme koennen die Anzahl der Geraete pro Parkplatz reduzieren, benoetigen aber eine sorgfaeltige Planung von Blickwinkeln, Beleuchtung, Datensicherheit, Zugriffsrechten und laufender Modellpruefung.
+- In Deutschland und der EU koennen Kamerabilder mit Personen oder Kennzeichen personenbezogene Daten sein. Eine videobasierte Parkplatzerkennung ist nicht automatisch verboten, benoetigt aber einen rechtmaessigen Zweck, Erforderlichkeit, Verhaeltnismaessigkeit, Transparenz, Datenminimierung, sichere Verarbeitung und ein passendes Loeschkonzept. Die [Datenschutz-Uebersicht der Europaeischen Kommission](https://commission.europa.eu/law/law-topic/data-protection_en) und die [Leitlinien des Europaeischen Datenschutzausschusses zu Videogeraeten](https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_201903_video_devices_en_0.pdf) geben dazu wichtige Hinweise.
+- Ein Einbau in oeffentliche Strassen oder gemeinsam genutzte Parkflaechen kann zusaetzlich eine Erlaubnis des Eigentuemers oder der Behoerde, fachgerechte Elektroarbeiten, eine Baugenehmigung, die Beachtung der Barrierefreiheit und eine klar geregelte Verantwortung fuer falsche Belegungsinformationen erfordern.
+
+### Sensordefekt und Austausch waehrend des Testens
+
+Waehrend des Testens wurde der rechte Sensor fuer den Parkplatz `A41` durch einen Kurzschluss beschaedigt und funktionierte danach nicht mehr. Er wurde durch ein [AZ-Delivery IR-Hinderniserkennungs-Sensormodul](https://www.az-delivery.de/en/products/ir-abstand-sensor-modul) ersetzt. Das Ersatzmodul verwendet einen LM393-Komparator, kann mit seinem Potentiometer eingestellt werden und unterstuetzt eine Betriebsspannung von 3.3 V bis 5 V.
+
+Bei den Projekttests konnte der Ersatzsensor schwarze Stoffe nicht zuverlaessig erkennen. Dunkle Materialien koennen einen grossen Teil des ausgesendeten Infrarotlichts absorbieren, statt es zum Empfaenger zurueckzureflektieren. Deshalb kann der rechte Parkplatz faelschlicherweise als frei erscheinen, wenn ein schwarzer Stoff oder eine andere schlecht reflektierende dunkle Oberflaeche den Sensor abdeckt. Dies ist eine bekannte Grenze des aktuellen Prototyps und muss bei Vorfuehrungen und Tests beachtet werden.
+
 ### Hardware-Grenzen
 
 - Es werden nur zwei echte Parkplaetze ueberwacht: `A12` und `A41`.
@@ -466,6 +519,8 @@ Die folgenden Bilder liegen im Ordner `Assets/` und dokumentieren den realen Auf
 | ![Breadboard und Board-Verkabelung](Assets/image-20260520-232528-899.jpeg) | Breadboard, NUCLEO-Bereich und Anschlussleitungen | Dient als Nachweis fuer den elektrischen Testaufbau |
 | ![LED-Funktion sichtbar](Assets/image-20260520-232528-945.jpeg) | Eingeschaltete gruene LED im Parkplatz | Zeigt die Funktion: freier Platz wird mit gruenem Licht signalisiert |
 | ![Parkplatz mit Modellauto](Assets/image-20260520-232528-989.jpeg) | Parkplatz mit Modellauto im Sensorbereich | Zeigt das Handlungsergebnis in einer realistischen Testsituation |
+| ![Parkplatzmodell mit neuem rechten Sensor](Assets/BoxWithNewSensor.jpeg) | Innenansicht des Modells nach dem Einbau des Ersatzsensors im rechten Parkplatz | Dokumentiert den geaenderten Aufbau nach der Beschaedigung des urspruenglichen Sensors beim Testen |
+| ![Nahaufnahme des neuen IR-Sensors](Assets/NewSensor.jpeg) | Nahaufnahme des neuen AZ-Delivery IR-Hinderniserkennungs-Sensormoduls | Zeigt den Ersatzsensor, seine Infrarot-Komponenten und das einstellbare Potentiometer |
 
 ## IPERKA 6-Phasen-Methode
 
@@ -504,6 +559,14 @@ In der Planungsphase wurde festgelegt, wie Hardware, Firmware und Web-Dashboard 
 Kurzangaben: Genutzt wurden CMake-Struktur, CubeMX-Pinbelegung, vorhandenes HTML-Dashboard und die Anforderungen aus der Aufgabenstellung. Ergebnis ist ein Arbeitsplan fuer Firmware-Kommentare, README-Aufbau und Nachweisstruktur fuer Fotos/Videos.
 
 ### Handlungsschritt 3: Entscheiden
+
+#### Warum STM32 statt Arduino verwendet wurde
+
+Urspruenglich war geplant, das Projekt mit einem Arduino umzusetzen. Eine Woche vor dem Abgabetermin wurden ein Arduino und die benoetigten Sensoren bestellt. Die Lieferung sollte innerhalb von zwei Tagen ankommen, wodurch normalerweise genug Zeit fuer Aufbau, Programmierung und Tests geblieben waere. Die Lieferung verspaetete sich jedoch stark und die bestellten Komponenten waren auch am Tag vor der Abgabe noch nicht angekommen.
+
+Da das Projekt am naechsten Morgen abgegeben werden musste, wurden von der Firma `3P-Services` ein STM32-Entwicklungsboard und zwei IR-Sensoren ausgeliehen. Dadurch konnte das Projekt kurzfristig fortgesetzt werden, allerdings aenderten sich die technischen Anforderungen deutlich. Im Vergleich zur urspruenglich geplanten Arduino-Loesung erforderte der STM32 auf einmal wesentlich mehr Konfiguration und hardwarenahe Arbeit. Pinbelegung, GPIO-Modi, Taktkonfiguration, UART-Kommunikation, Interrupts, Firmwarestruktur, Build-System und die Einbindung der STM32-HAL/BSP-Treiber mussten unter starkem Zeitdruck verstanden und eingerichtet werden.
+
+Die generierten STM32-Treiber wurden nicht vollstaendig von Grund auf neu geschrieben, mussten aber passend ausgewaehlt, eingebunden, konfiguriert und mit der eigenen Firmware verbunden werden. Dies war kurz vor der Abgabe ein deutlich groesserer Arbeitsaufwand als erwartet. Gleichzeitig fuehrte die Verwendung des STM32 zu einem tieferen Verstaendnis fuer Mikrocontroller-Initialisierung, Hardware-Abstraktionsschichten, serielle Kommunikation, Interrupts und Embedded-Build-Systeme, als es bei einer einfacheren Arduino-Umsetzung wahrscheinlich notwendig gewesen waere.
 
 In der Entscheidungsphase wurde die bestehende Architektur beibehalten, weil sie fuer einen Prototyp uebersichtlich und passend ist. Es wurde entschieden, nur den eigenen Programmcode gezielt zu kommentieren und die generierten HAL- und Treiberdateien nicht inhaltlich umzubauen. Fuer die Statusausgabe wurde JSON beibehalten, weil es sowohl im Terminal lesbar ist als auch vom Web-Dashboard direkt verarbeitet werden kann. Als Live-Plaetze bleiben `A12` und `A41` definiert, waehrend die anderen Dashboard-Plaetze als Dummy-Werte dienen. Diese Entscheidungen halten das Projekt einfach, praesentierbar und gut wartbar.
 

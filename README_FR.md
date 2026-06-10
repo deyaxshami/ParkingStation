@@ -332,6 +332,17 @@ Le fichier `parking-station.html` est une interface utilisateur locale simple. I
 5. Utiliser `Request Status` pour demander l'état actuel.
 6. Couvrir le capteur A12 ou A41 et observer la LED verte correspondante; après environ trois secondes, le changement JSON apparaît aussi.
 
+### Captures du tableau de bord
+
+La vue d'ensemble suivante montre le tableau de bord avant l'établissement de la connexion série. Les places matérielles `A12` et `A41` sont d'abord affichées comme inconnues jusqu'à la demande de l'état actuel.
+
+![Vue d'ensemble du tableau de bord web Parking Station](Assets/WebSiteOverView.png)
+
+| Bouton Connect | Sélection du port série |
+| --- | --- |
+| ![Bouton Connect dans le tableau de bord web](Assets/ConnectButton.png) | ![Dialogue du navigateur pour sélectionner le port série](Assets/ChooseSerailPort.png) |
+| Cliquer sur `Connect` ouvre la sélection des appareils Web Serial du navigateur. | Sélectionner le ST-LINK Virtual COM Port. Si aucun appareil compatible n'apparaît, vérifier la connexion USB et qu'aucun autre programme n'utilise le port. |
+
 ### Démarrage local du tableau de bord
 
 Web Serial fonctionne généralement dans Chrome ou Edge et nécessite un contexte sécurisé. Pour le développement local, `localhost` convient. Un démarrage simple est par exemple:
@@ -426,6 +437,48 @@ Dans le tableau de bord, les champs `A12` et `A41` doivent afficher l'état rée
 
 ## Limites et restrictions connues
 
+### Projet uniquement scolaire et inadapté à une utilisation réelle
+
+Cette Parking Station est exclusivement un projet scolaire et de démonstration. Elle montre l'interaction de base entre les capteurs, le firmware, la communication série et une interface web, mais ce n'est pas un produit certifié ou suffisamment robuste pour fonctionner dans un parking public ou commercial réel. Un système réel doit rester fiable lorsque la météo change, détecter automatiquement les pannes, résister au trafic et au vandalisme, protéger ses communications et continuer à fonctionner en sécurité lorsqu'un composant tombe en panne.
+
+#### Scénarios de panne possibles dans le monde réel
+
+- Une feuille, un papier, un déchet ou un autre objet posé sur le capteur peut être signalé comme un véhicule stationné.
+- La pluie, les flaques, la condensation, la boue, la neige ou la glace peuvent couvrir le capteur, modifier la réflexion infrarouge, provoquer de la corrosion ou créer une panne électrique.
+- Une personne qui reste sur la place pour parler avec un ami, un vélo, un chariot, un animal ou un autre objet non automobile peut déclencher un faux état occupé.
+- Les surfaces noires, mates, sales ou peu réfléchissantes peuvent ne pas renvoyer assez de lumière infrarouge et faire apparaître une place occupée comme libre.
+- La lumière directe du soleil, les phares, les ombres et les variations de lumière ambiante peuvent perturber les mesures infrarouges.
+- Un véhicule avec une garde au sol élevée, une forme inhabituelle ou une mauvaise position de stationnement peut ne pas couvrir correctement le capteur.
+- Un véhicule voisin ou une partie qui dépasse peut déclencher la mauvaise place.
+- Les câbles et composants exposés peuvent être endommagés par l'humidité, le trafic, les équipements de nettoyage, le vandalisme ou un contact accidentel.
+- L'alimentation, l'USB, la communication série, le navigateur ou le microcontrôleur peuvent tomber en panne. Le prototype ne possède ni signalement automatique des défauts, ni redondance, ni surveillance à distance, ni stratégie fiable de récupération.
+- Le tableau de bord Web Serial local convient à une démonstration, mais ce n'est pas une plateforme de gestion évolutive, sécurisée ou hautement disponible.
+
+#### Meilleures solutions pour de vrais parkings
+
+| Solution | Avantages | Inconvénients et réalisme |
+| --- | --- | --- |
+| Capteur au sol résistant aux intempéries avec magnétomètre et radar | La fusion de capteurs détecte l'influence magnétique et la présence physique du véhicule; feuilles, personnes et éclairage ont moins d'influence | Solution extérieure réaliste et robuste, mais les travaux de chaussée, l'installation étanche, le remplacement des batteries, l'étalonnage et la maintenance augmentent les coûts |
+| Capteur de poids ou de pression avec capteur IR | Un seuil de poids adapté peut distinguer de nombreux véhicules des feuilles ou des personnes, tandis que l'IR fournit une seconde mesure | Techniquement possible, mais l'installation dans la chaussée est coûteuse; drainage, gel, usure, charges lourdes, motos et étalonnage restent difficiles |
+| Capteurs ultrasoniques ou radar en hauteur | Montage protégé et bonne détection par place, surtout dans les parkings couverts | Réaliste lorsque des plafonds ou structures porteuses existent; moins pratique pour les parkings ouverts et nécessite toujours alimentation, réseau et maintenance |
+| Système de caméras avec IA | Une caméra peut surveiller plusieurs places et distinguer les véhicules de nombreux autres objets | Potentiellement économique pour de nombreuses places, mais affecté par les occultations, l'obscurité, la météo, les objectifs sales et les erreurs du modèle; il crée aussi d'importantes obligations de confidentialité et de cybersécurité |
+
+Pour une petite installation extérieure réelle, un capteur au sol industriel classé IP combinant magnétomètre et radar serait généralement plus réaliste que le prototype IR exposé. Il devrait être connecté à un backend surveillé et inclure le contrôle des batteries, la vérification des communications, des états de défaut, des mises à jour sécurisées et une maintenance régulière. Une caméra avec IA peut être utile lorsqu'il faut couvrir de nombreuses places, mais elle devrait de préférence traiter l'occupation localement, éviter l'identification et ne pas stocker d'images sauf si cela est nécessaire et juridiquement justifié.
+
+#### Évaluation financière, juridique et opérationnelle
+
+- Les composants peu coûteux utilisés dans ce prototype ne représentent pas le coût principal d'un système réel. Le génie civil, les boîtiers résistants aux intempéries, l'installation, l'alimentation, le réseau, le logiciel backend, l'étalonnage, les inspections, les réparations et la maintenance à long terme peuvent coûter bien plus que les capteurs eux-mêmes.
+- La fusion de capteurs améliore la fiabilité, mais augmente le prix du matériel, la consommation d'énergie, la complexité logicielle et l'effort de maintenance. Même un système professionnel doit être testé sur le terrain et sa précision mesurée avant son déploiement.
+- Les systèmes de caméras peuvent réduire le nombre d'appareils par place, mais nécessitent une planification attentive des angles de vue, de l'éclairage, de la sécurité des données, des contrôles d'accès et de la validation continue du modèle.
+- En Allemagne et dans l'UE, les images contenant des personnes ou des plaques d'immatriculation peuvent constituer des données personnelles. La détection de stationnement par vidéo n'est pas automatiquement interdite, mais nécessite une finalité légitime, la nécessité, la proportionnalité, la transparence, la minimisation des données, un traitement sécurisé et une politique de suppression adaptée. La [présentation de la protection des données de la Commission européenne](https://commission.europa.eu/law/law-topic/data-protection_en) et les [lignes directrices du Comité européen de la protection des données sur les dispositifs vidéo](https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_201903_video_devices_en_0.pdf) fournissent des indications utiles.
+- Une installation sur la voie publique ou dans un parking partagé peut également nécessiter l'autorisation du propriétaire ou de l'autorité, des travaux électriques conformes, une autorisation de construction, la prise en compte de l'accessibilité et une responsabilité définie en cas d'information d'occupation incorrecte.
+
+### Défaillance et remplacement du capteur pendant les tests
+
+Pendant les tests, le capteur droit de la place `A41` a été endommagé par un court-circuit et ne fonctionnait plus. Il a été remplacé par un [module capteur IR de détection d'obstacles AZ-Delivery](https://www.az-delivery.de/en/products/ir-abstand-sensor-modul). Le module de remplacement utilise un comparateur LM393, peut être réglé avec son potentiomètre et prend en charge une tension de fonctionnement de 3.3 V à 5 V.
+
+Lors des tests du projet, le capteur de remplacement n'a pas détecté de manière fiable les tissus noirs. Les matériaux sombres peuvent absorber une grande partie de la lumière infrarouge émise au lieu de la réfléchir vers le récepteur. La place droite peut donc apparaître à tort comme libre lorsqu'un tissu noir ou une autre surface sombre peu réfléchissante couvre le capteur. Il s'agit d'une limite connue du prototype actuel qui doit être prise en compte pendant les démonstrations et les tests.
+
 ### Limites matérielles
 
 - Seules deux vraies places sont surveillées: `A12` et `A41`.
@@ -472,6 +525,8 @@ Les images suivantes se trouvent dans le dossier `Assets/` et documentent le mon
 | ![Breadboard et câblage de la carte](Assets/image-20260520-232528-899.jpeg) | Breadboard, zone NUCLEO et fils de connexion | Sert de preuve du montage de test électrique |
 | ![Fonction LED visible](Assets/image-20260520-232528-945.jpeg) | LED verte allumée dans la place | Montre la fonction: une place libre est signalée par une lumière verte |
 | ![Place avec voiture miniature](Assets/image-20260520-232528-989.jpeg) | Place avec voiture miniature dans la zone du capteur | Montre le résultat final dans une situation de test réaliste |
+| ![Modèle de parking avec le nouveau capteur droit](Assets/BoxWithNewSensor.jpeg) | Vue intérieure du modèle après l'installation du capteur de remplacement dans la place droite | Documente le montage modifié après l'endommagement du capteur d'origine pendant les tests |
+| ![Gros plan du nouveau capteur IR](Assets/NewSensor.jpeg) | Gros plan du nouveau module capteur IR de détection d'obstacles AZ-Delivery | Montre le capteur de remplacement, ses composants infrarouges et son potentiomètre réglable |
 
 ## Méthode IPERKA en 6 phases
 
@@ -510,6 +565,14 @@ Dans la phase de planification, il a été défini comment le matériel, le firm
 Détails courts: la structure CMake, l'affectation des broches CubeMX, le tableau de bord HTML existant et les exigences de la tâche ont été utilisés. Le résultat est un plan de travail pour les commentaires du firmware, la structure README et la structure de preuve pour photos/vidéos.
 
 ### Étape d'action 3: Décider
+
+#### Pourquoi STM32 a été utilisé au lieu d'Arduino
+
+Le plan initial était de réaliser le projet avec un Arduino. Une semaine avant la date de remise, un Arduino et les capteurs nécessaires ont été commandés. La livraison devait arriver sous deux jours, ce qui aurait normalement laissé suffisamment de temps pour le montage, la programmation et les tests. Cependant, la livraison a pris beaucoup de retard et les composants commandés n'étaient toujours pas arrivés la veille de la remise.
+
+Comme le projet devait être remis le lendemain matin, une carte de développement STM32 et deux capteurs IR ont été empruntés à l'entreprise `3P-Services`. Cela a permis de poursuivre le projet à court terme, mais a aussi considérablement modifié les exigences techniques. Par rapport à la solution Arduino initialement prévue, le STM32 a soudain demandé beaucoup plus de configuration et de travail proche du matériel. L'affectation des broches, les modes GPIO, la configuration de l'horloge, la communication UART, les interruptions, la structure du firmware, le système de compilation et l'intégration des pilotes STM32 HAL/BSP ont dû être compris et configurés sous une forte pression temporelle.
+
+Les pilotes STM32 générés n'ont pas été entièrement réécrits depuis zéro, mais ils ont dû être sélectionnés, intégrés, configurés et correctement reliés au firmware propre du projet. Cela représentait une charge de travail beaucoup plus importante que prévu peu avant la remise. En même temps, l'utilisation du STM32 a permis une compréhension plus approfondie de l'initialisation des microcontrôleurs, des couches d'abstraction matérielle, de la communication série, des interruptions et des systèmes de compilation embarqués qu'une implémentation Arduino plus simple aurait probablement exigée.
 
 Dans la phase de décision, l'architecture existante a été conservée parce qu'elle est claire et adaptée à un prototype. Il a été décidé de commenter de manière ciblée uniquement le code propre du programme et de ne pas reconstruire les fichiers HAL et drivers générés. Pour la sortie d'état, JSON a été conservé parce qu'il est lisible dans le terminal et peut être traité directement par le tableau de bord web. `A12` et `A41` restent les places en direct, tandis que les autres places du tableau de bord servent de valeurs factices. Ces décisions gardent le projet simple, présentable et maintenable.
 

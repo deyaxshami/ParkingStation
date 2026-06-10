@@ -332,6 +332,17 @@ El archivo `parking-station.html` es una interfaz local sencilla. Muestra un blo
 5. Con `Request Status`, solicitar el estado actual.
 6. Cubrir el sensor A12 o A41 y observar el LED verde correspondiente; después de unos tres segundos aparece también el cambio JSON.
 
+### Capturas del panel
+
+La siguiente vista general muestra el panel antes de establecer la conexión serie. Las plazas de hardware `A12` y `A41` aparecen inicialmente como desconocidas hasta que se solicita el estado actual.
+
+![Vista general del panel web de Parking Station](Assets/WebSiteOverView.png)
+
+| Botón Connect | Selección del puerto serie |
+| --- | --- |
+| ![Botón Connect en el panel web](Assets/ConnectButton.png) | ![Diálogo del navegador para seleccionar el puerto serie](Assets/ChooseSerailPort.png) |
+| Hacer clic en `Connect` abre la selección de dispositivos Web Serial del navegador. | Seleccionar el ST-LINK Virtual COM Port. Si no aparece ningún dispositivo compatible, comprobar la conexión USB y que ningún otro programa esté usando el puerto. |
+
 ### Inicio local del panel
 
 Web Serial normalmente funciona en Chrome o Edge y necesita un contexto seguro. Para desarrollo local, `localhost` es adecuado. Un inicio sencillo es:
@@ -426,6 +437,48 @@ En el panel, los campos `A12` y `A41` deben mostrar el estado real de los sensor
 
 ## Límites y restricciones conocidas
 
+### Proyecto exclusivamente escolar y no apto para uso real
+
+Esta Parking Station es exclusivamente un proyecto escolar y de demostración. Muestra la interacción básica entre sensores, firmware, comunicación serie e interfaz web, pero no es un producto certificado ni suficientemente robusto para funcionar en un aparcamiento público o comercial real. Un sistema real debe seguir siendo fiable con cambios meteorológicos, detectar fallos automáticamente, resistir tráfico y vandalismo, proteger sus comunicaciones y continuar funcionando de forma segura cuando falla un componente.
+
+#### Posibles situaciones de fallo en el mundo real
+
+- Una hoja, papel, basura u otro objeto sobre el sensor puede notificarse como un vehículo aparcado.
+- La lluvia, charcos, condensación, barro, nieve o hielo pueden cubrir el sensor, cambiar la reflexión infrarroja, causar corrosión o provocar un fallo eléctrico.
+- Una persona que permanezca en la plaza hablando con un amigo, una bicicleta, carrito de compra, animal u otro objeto que no sea un coche puede activar una ocupación falsa.
+- Las superficies negras, mates, sucias o poco reflectantes pueden no devolver suficiente luz infrarroja y hacer que una plaza ocupada aparezca libre.
+- La luz solar directa, los faros, las sombras y los cambios de luz ambiental pueden interferir con las mediciones infrarrojas.
+- Un vehículo con gran altura libre al suelo, forma inusual o posición desfavorable puede no cubrir correctamente el sensor.
+- Un vehículo vecino o una parte sobresaliente puede activar la plaza equivocada.
+- Los cables y componentes expuestos pueden dañarse por humedad, tráfico, equipos de limpieza, vandalismo o contacto accidental.
+- Pueden fallar la alimentación, USB, comunicación serie, navegador o microcontrolador. El prototipo no tiene aviso automático de fallos, redundancia, supervisión remota ni una estrategia fiable de recuperación.
+- El panel Web Serial local sirve para una demostración, pero no es una plataforma de gestión escalable, protegida o de alta disponibilidad.
+
+#### Mejores soluciones para aparcamientos reales
+
+| Solución | Ventajas | Desventajas y realismo |
+| --- | --- | --- |
+| Sensor de suelo resistente a la intemperie con magnetómetro y radar | La fusión de sensores detecta la influencia magnética y la presencia física del vehículo; hojas, personas e iluminación tienen menos influencia | Solución exterior realista y robusta, pero las obras en el pavimento, instalación impermeable, sustitución de baterías, calibración y mantenimiento aumentan el coste |
+| Sensor de peso o presión junto con sensor IR | Un umbral de peso adecuado puede distinguir muchos vehículos de hojas o personas, mientras IR aporta una segunda medición | Técnicamente posible, pero su instalación en la calzada es cara; drenaje, heladas, desgaste, cargas pesadas, motocicletas y calibración siguen siendo difíciles |
+| Sensores superiores ultrasónicos o de radar | Montaje protegido y buena detección por plaza, especialmente en aparcamientos cubiertos | Realista donde existen techos o estructuras de soporte; menos práctico en aparcamientos abiertos y todavía requiere alimentación, red y mantenimiento |
+| Sistema de cámaras con IA | Una cámara puede vigilar varias plazas y distinguir vehículos de muchos otros objetos | Potencialmente económico para muchas plazas, pero afectado por oclusión, oscuridad, clima, lentes sucias y errores del modelo; también genera importantes obligaciones de privacidad y ciberseguridad |
+
+Para una instalación exterior real pequeña, un sensor de suelo industrial con clasificación IP que combine magnetómetro y radar suele ser más realista que el prototipo IR expuesto. Debe conectarse a un backend supervisado e incluir control de batería, comprobación de comunicación, estados de fallo, actualizaciones seguras y mantenimiento periódico. Una cámara con IA puede ser útil cuando deben cubrirse muchas plazas, pero debería procesar la ocupación localmente, evitar la identificación y no almacenar imágenes salvo que sea necesario y esté legalmente justificado.
+
+#### Evaluación financiera, legal y operativa
+
+- Los componentes económicos usados en este prototipo no representan el coste principal de un sistema real. Obra civil, carcasas resistentes a la intemperie, instalación, alimentación, red, software backend, calibración, inspecciones, reparaciones y mantenimiento a largo plazo pueden costar mucho más que los propios sensores.
+- La fusión de sensores mejora la fiabilidad, pero aumenta el precio del hardware, consumo energético, complejidad del software y esfuerzo de mantenimiento. Incluso un sistema profesional necesita pruebas de campo y una medición de precisión antes de su uso.
+- Los sistemas de cámaras pueden reducir el número de dispositivos por plaza, pero necesitan una planificación cuidadosa de ángulos de visión, iluminación, seguridad de datos, controles de acceso y validación continua del modelo.
+- En Alemania y la UE, las imágenes con personas o matrículas pueden ser datos personales. La detección de aparcamiento mediante vídeo no está prohibida automáticamente, pero necesita una finalidad legítima, necesidad, proporcionalidad, transparencia, minimización de datos, tratamiento seguro y una política adecuada de eliminación. La [información sobre protección de datos de la Comisión Europea](https://commission.europa.eu/law/law-topic/data-protection_en) y las [directrices del Comité Europeo de Protección de Datos sobre dispositivos de vídeo](https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_201903_video_devices_en_0.pdf) ofrecen orientación relevante.
+- La instalación en vías públicas o aparcamientos compartidos puede requerir además permiso del propietario o autoridad, trabajos eléctricos conformes, aprobación de obra, consideración de accesibilidad y responsabilidad definida por información de ocupación incorrecta.
+
+### Fallo y sustitución del sensor durante las pruebas
+
+Durante las pruebas, el sensor derecho de la plaza `A41` se dañó por un cortocircuito y dejó de funcionar. Se sustituyó por un [módulo sensor IR de detección de obstáculos de AZ-Delivery](https://www.az-delivery.de/en/products/ir-abstand-sensor-modul). El módulo de sustitución utiliza un comparador LM393, puede ajustarse mediante su potenciómetro y admite una tensión de funcionamiento de 3.3 V a 5 V.
+
+En las pruebas del proyecto, el sensor de sustitución no detectó de forma fiable los tejidos negros. Los materiales oscuros pueden absorber gran parte de la luz infrarroja emitida en lugar de reflejarla hacia el receptor. Por ello, la plaza derecha puede aparecer incorrectamente como libre cuando un tejido negro u otra superficie oscura poco reflectante cubre el sensor. Esta es una limitación conocida del prototipo actual y debe tenerse en cuenta durante demostraciones y pruebas.
+
 ### Límites de hardware
 
 - Solo se supervisan dos plazas reales: `A12` y `A41`.
@@ -472,6 +525,8 @@ Las siguientes imágenes están en la carpeta `Assets/` y documentan el montaje 
 | ![Breadboard y cableado de la placa](Assets/image-20260520-232528-899.jpeg) | Breadboard, zona NUCLEO y cables de conexión | Sirve como prueba del montaje eléctrico de prueba |
 | ![Función LED visible](Assets/image-20260520-232528-945.jpeg) | LED verde encendido en la plaza | Muestra la función: una plaza libre se señaliza con luz verde |
 | ![Plaza con coche de maqueta](Assets/image-20260520-232528-989.jpeg) | Plaza con coche de maqueta en la zona del sensor | Muestra el resultado final en una situación de prueba realista |
+| ![Modelo de aparcamiento con el nuevo sensor derecho](Assets/BoxWithNewSensor.jpeg) | Vista interior del modelo después de instalar el sensor de sustitución en la plaza derecha | Documenta el montaje modificado después de que el sensor original se dañara durante las pruebas |
+| ![Primer plano del nuevo sensor IR](Assets/NewSensor.jpeg) | Primer plano del nuevo módulo sensor IR de detección de obstáculos de AZ-Delivery | Muestra el sensor de sustitución, sus componentes infrarrojos y el potenciómetro ajustable |
 
 ## Método IPERKA de 6 fases
 
@@ -510,6 +565,14 @@ En la fase de planificación se definió cómo debían trabajar juntos hardware,
 Datos breves: Se usaron la estructura CMake, la asignación de pines de CubeMX, el panel HTML existente y los requisitos de la tarea. El resultado es un plan de trabajo para comentarios de firmware, estructura del README y estructura de evidencias para fotos/videos.
 
 ### Paso de acción 3: Decidir
+
+#### Por qué se utilizó STM32 en lugar de Arduino
+
+El plan original era implementar el proyecto con un Arduino. Una semana antes de la fecha de entrega se encargaron un Arduino y los sensores necesarios. La entrega debía llegar en dos días, lo que normalmente habría dejado tiempo suficiente para el montaje, la programación y las pruebas. Sin embargo, la entrega se retrasó considerablemente y los componentes solicitados todavía no habían llegado el día anterior a la entrega.
+
+Como el proyecto debía entregarse a la mañana siguiente, se tomaron prestados de la empresa `3P-Services` una placa de desarrollo STM32 y dos sensores IR. Esto permitió continuar el proyecto con poca antelación, pero también cambió considerablemente los requisitos técnicos. En comparación con la solución Arduino prevista originalmente, el STM32 exigió de repente mucha más configuración y trabajo cercano al hardware. Fue necesario comprender y configurar bajo una fuerte presión de tiempo la asignación de pines, los modos GPIO, el reloj, la comunicación UART, las interrupciones, la estructura del firmware, el sistema de compilación y la integración de los controladores STM32 HAL/BSP.
+
+Los controladores STM32 generados no se reescribieron completamente desde cero, pero tuvieron que seleccionarse, integrarse, configurarse y conectarse correctamente con el firmware propio del proyecto. Esto supuso una carga de trabajo mucho mayor de lo esperado poco antes de la entrega. Al mismo tiempo, el uso del STM32 permitió comprender con mayor profundidad la inicialización de microcontroladores, las capas de abstracción de hardware, la comunicación serie, las interrupciones y los sistemas de compilación embebidos de lo que probablemente habría requerido una implementación Arduino más sencilla.
 
 En la fase de decisión se mantuvo la arquitectura existente porque es clara y adecuada para un prototipo. Se decidió comentar de forma específica solo el código propio del programa y no reconstruir internamente los archivos HAL y de controladores generados. Para la salida de estado se mantuvo JSON, porque es legible en el terminal y también puede ser procesado directamente por el panel web. `A12` y `A41` siguen siendo las plazas en vivo, mientras que las otras plazas del panel se usan como valores ficticios. Estas decisiones mantienen el proyecto sencillo, presentable y fácil de mantener.
 

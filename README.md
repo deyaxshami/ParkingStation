@@ -332,6 +332,17 @@ The file `parking-station.html` is a simple local user interface. It displays a 
 5. Use `Request Status` to request the current state.
 6. Cover sensor A12 or A41 and observe the corresponding green LED; after about three seconds, the JSON change also appears.
 
+### Dashboard Screenshots
+
+The following overview shows the dashboard before the serial connection is established. The hardware spaces `A12` and `A41` are initially displayed as unknown until the current status is requested.
+
+![Overview of the Parking Station Web Dashboard](Assets/WebSiteOverView.png)
+
+| Connect button | Serial-port selection |
+| --- | --- |
+| ![Connect button in the Web Dashboard](Assets/ConnectButton.png) | ![Browser dialog for selecting the serial port](Assets/ChooseSerailPort.png) |
+| Click `Connect` to open the browser's Web Serial device selection. | Select the ST-LINK Virtual COM Port. If no compatible device appears, check the USB connection and whether another program is already using the port. |
+
 ### Starting the Dashboard Locally
 
 Web Serial usually works in Chrome or Edge and requires a secure context. For local development, `localhost` is suitable. A simple start is:
@@ -426,6 +437,48 @@ In the dashboard, the fields `A12` and `A41` should show the real sensor state. 
 
 ## Limits and Known Restrictions
 
+### School Project and Unsuitability for Real-World Operation
+
+This Parking Station is exclusively a school and demonstration project. It shows the basic interaction between sensors, firmware, serial communication, and a Web interface, but it is not a certified or sufficiently robust product for operation in a real public or commercial parking area. A real system must remain reliable in changing weather, detect faults automatically, withstand traffic and vandalism, protect its communications, and continue operating safely when individual components fail.
+
+#### Possible Real-World Failure Scenarios
+
+- A leaf, piece of paper, rubbish, or another object lying on the sensor can be reported as a parked vehicle.
+- Rain, puddles, condensation, mud, snow, or ice can cover the sensor, change the infrared reflection, cause corrosion, or create an electrical fault.
+- A person who stands on the space while talking, a bicycle, shopping cart, animal, or other non-car object can trigger a false occupied state.
+- Black, matte, dirty, or poorly reflecting surfaces may not reflect enough infrared light and can make an occupied space appear free.
+- Direct sunlight, headlights, shadows, and changing ambient light can interfere with infrared measurements.
+- A vehicle with high ground clearance, an unusual shape, or an unfavorable parking position may not cover the sensor correctly.
+- A neighboring vehicle or an overhanging part can trigger the wrong space.
+- Cables and exposed components can be damaged by moisture, traffic, cleaning equipment, vandalism, or accidental contact.
+- Power, USB, serial communication, the browser, or the microcontroller can fail. The prototype has no automatic fault reporting, redundancy, remote monitoring, or reliable recovery strategy.
+- The local Web Serial dashboard is suitable for a demonstration, but it is not a scalable, secured, or highly available management platform.
+
+#### Better Solutions for Real Parking Areas
+
+| Solution | Advantages | Disadvantages and realism |
+| --- | --- | --- |
+| Weatherproof in-ground magnetometer plus radar | Sensor fusion detects both the vehicle's magnetic influence and physical presence; leaves, people, and lighting have less influence | A realistic and robust outdoor solution, but pavement work, waterproof installation, battery replacement, calibration, and maintenance increase costs |
+| Weight or pressure sensor plus IR sensor | A suitable weight threshold can distinguish many vehicles from leaves or people, while IR provides a second measurement | Technically possible, but installation in the road surface is expensive; drainage, frost, wear, heavy loads, motorcycles, and calibration remain difficult |
+| Overhead ultrasonic or radar sensors | Protected mounting and good per-space detection, especially in indoor car parks | Realistic where ceilings or support structures exist; less practical for open parking areas and still requires power, networking, and maintenance |
+| AI camera system | One camera can monitor several spaces and can distinguish vehicles from many other objects | Potentially economical for many spaces, but affected by occlusion, darkness, weather, dirty lenses, and model errors; it also creates significant privacy and cybersecurity obligations |
+
+For a small real outdoor installation, an industrial, IP-rated in-ground sensor that combines a magnetometer and radar would usually be more realistic than the exposed IR prototype. It should be connected to a monitored backend and include battery monitoring, communication checks, fault states, secure updates, and regular maintenance. An AI camera can be useful where many spaces must be covered, but it should preferably process occupancy locally, avoid identification, and avoid storing images unless storage is necessary and legally justified.
+
+#### Financial, Legal, and Operational Assessment
+
+- The inexpensive parts used in this prototype do not represent the main cost of a real system. Civil engineering, weatherproof housings, installation, power, networking, backend software, calibration, inspections, repairs, and long-term maintenance can cost much more than the sensors themselves.
+- Sensor fusion improves reliability but increases hardware price, energy use, software complexity, and maintenance effort. A professional system still needs field testing and measured accuracy before deployment.
+- Camera systems may reduce the number of devices per parking space, but they require careful planning of viewing angles, lighting, data security, access control, and ongoing model validation.
+- In Germany and the EU, camera images containing people or license plates can be personal data. Video-based parking detection is not automatically prohibited, but it needs a lawful purpose, necessity, proportionality, transparency, data minimization, secure processing, and an appropriate deletion policy. The [European Commission's data-protection overview](https://commission.europa.eu/law/law-topic/data-protection_en) and the [European Data Protection Board guidelines on video devices](https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_201903_video_devices_en_0.pdf) provide relevant guidance.
+- Installation in public roads or shared parking areas can additionally require permission from the owner or authority, compliant electrical work, construction approval, accessibility consideration, and defined responsibility for incorrect occupancy information.
+
+### Sensor Failure and Replacement During Testing
+
+During testing, the right-hand sensor for parking space `A41` was damaged by a short circuit and no longer worked. It was replaced with an [AZ-Delivery IR obstacle-detection sensor module](https://www.az-delivery.de/en/products/ir-abstand-sensor-modul). The replacement module uses an LM393 comparator, can be adjusted with its potentiometer, and supports an operating voltage from 3.3 V to 5 V.
+
+In the project tests, the replacement sensor did not reliably detect black fabrics. Dark materials can absorb much of the emitted infrared light instead of reflecting it back to the receiver. Therefore, the right-hand parking space may incorrectly appear free when a black fabric or another poorly reflecting dark surface covers the sensor. This is a known limitation of the current prototype and should be considered during demonstrations and tests.
+
 ### Hardware Limits
 
 - Only two real parking spaces are monitored: `A12` and `A41`.
@@ -472,6 +525,8 @@ The following images are stored in the `Assets/` folder and document the real se
 | ![Breadboard and board wiring](Assets/image-20260520-232528-899.jpeg) | Breadboard, NUCLEO area, and connection wires | Serves as proof of the electrical test setup |
 | ![LED function visible](Assets/image-20260520-232528-945.jpeg) | Switched-on green LED in the parking space | Shows the function: a free space is signaled with green light |
 | ![Parking space with model car](Assets/image-20260520-232528-989.jpeg) | Parking space with a model car in the sensor area | Shows the final result in a realistic test situation |
+| ![Parking model with the new right-hand sensor](Assets/BoxWithNewSensor.jpeg) | Interior view of the model after installing the replacement sensor on the right-hand parking space | Documents the changed setup after the original sensor was damaged during testing |
+| ![Close-up of the new IR sensor](Assets/NewSensor.jpeg) | Close-up of the new AZ-Delivery IR obstacle-detection sensor module | Shows the replacement sensor, its infrared components, and adjustable potentiometer |
 
 ## IPERKA 6-Phase Method
 
@@ -510,6 +565,14 @@ In the planning phase, it was defined how hardware, firmware, and Web Dashboard 
 Short details: The CMake structure, CubeMX pinout, existing HTML Dashboard, and the requirements from the task were used. The result is a work plan for firmware comments, README structure, and evidence structure for photos/videos.
 
 ### Action Step 3: Deciding
+
+#### Why STM32 Was Used Instead of Arduino
+
+The original plan was to implement the project with an Arduino. One week before the submission deadline, an Arduino and the required sensors were ordered. The delivery was expected within two days, which would normally have left enough time for assembly, programming, and testing. However, the delivery was delayed significantly and the ordered components had still not arrived on the day before submission.
+
+Because the project had to be submitted the next morning, an STM32 development board and two IR sensors were borrowed from the company `3P-Services`. This made it possible to continue the project at short notice, but it also changed the technical requirements considerably. Compared with the originally planned Arduino solution, the STM32 required much more configuration and low-level work at once. The board pinout, GPIO modes, clock configuration, UART communication, interrupts, firmware structure, build system, and integration of the STM32 HAL/BSP drivers all had to be understood and configured under strong time pressure.
+
+The generated STM32 drivers were not rewritten completely from scratch, but they still had to be selected, integrated, configured, and connected correctly to the project's own firmware. This was a much larger workload than expected shortly before submission. At the same time, using the STM32 provided a deeper understanding of microcontroller initialization, hardware abstraction layers, serial communication, interrupts, and embedded build systems than a simpler Arduino implementation would likely have required.
 
 In the decision phase, the existing architecture was kept because it is clear and suitable for a prototype. It was decided to comment only the project's own program code in a targeted way and not to restructure the generated HAL and driver files. JSON was kept for status output because it is readable in the terminal and can also be processed directly by the Web Dashboard. `A12` and `A41` remain the live spaces, while the other dashboard spaces are used as dummy values. These decisions keep the project simple, presentable, and maintainable.
 
